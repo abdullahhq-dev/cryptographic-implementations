@@ -1,0 +1,14 @@
+# Temporary work
+scratch/
+
+# Build artifacts
+build/
+
+# Compiled object files
+*.o
+
+# Executables
+*.out
+
+# VS Code settings
+.vscode/
