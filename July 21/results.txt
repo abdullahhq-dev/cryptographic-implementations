@@ -1,0 +1,23 @@
+Benchmarking results
+
+Compilation : gcc -O0 gcd.c -o benchmarking
+Output:
+Checksum 1405
+Iterations            : 10,000
+Total Time            : 1595751 ns
+Average execution Time     : 159.575100 ns
+
+Compilation : gcc -O2 gcd.c -o benchmarking
+Output:
+Checksum 1405
+Iterations            : 10,000
+Total Time            : 1187006 ns
+Average execution Time     : 118.700600 ns
+
+Compilation : gcc -O3 gcd.c -o benchmarking
+Output:
+Checksum 1405
+Iterations            : 10,000
+Total Time            : 1200287 ns
+Average execution Time     : 120.028700 ns
+
