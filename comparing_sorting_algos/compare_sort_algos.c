@@ -1,4 +1,4 @@
-/* The code below is generated using Gemini AI by combining the codes I had written for all 3 sorting algorithms last year as part of my intro to c course. The Execution times are calculated using the same method I wrote for the gcd program.*/
+/* The code below is generated using Gemini AI by combining the codes I had written for all 3 sorting algorithms last year as part of the intro to c course. The Execution times are calculated using the same method I wrote for the gcd program.*/
 
 #include <stdio.h>
 #include <stdlib.h>

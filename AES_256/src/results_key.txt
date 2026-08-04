@@ -1,0 +1,42 @@
+gcc O0
+Checksum: 00
+Iterations            : 100000
+Total Cycles           : 429151769
+Cycles / Key expansion    : 4291.52
+Cycles / Byte         : 17.8813
+Total Time            : 215444017 ns
+Average Time / Key expansion     : 2154.44 ns
+Average Time / Byte    : 8.98 ns
+
+
+gcc O1
+Checksum: 00
+Iterations            : 100000
+Total Cycles           : 146970635
+Cycles / Key expansion    : 1469.71
+Cycles / Byte         : 6.1238
+Total Time            : 73783351 ns
+Average Time / Key expansion     : 737.83 ns
+Average Time / Byte    : 3.07 ns
+
+
+gcc O2
+Checksum: 00
+Iterations            : 100000
+Total Cycles           : 106605647
+Cycles / Key expansion    : 1066.06
+Cycles / Byte         : 4.4419
+Total Time            : 53519294 ns
+Average Time / Key expansion     : 535.19 ns
+Average Time / Byte    : 2.23 ns
+
+
+gcc O3
+Checksum: 00
+Iterations            : 100000
+Total Cycles           : 77852243
+Cycles / Key expansion    : 778.52
+Cycles / Byte         : 3.2438
+Total Time            : 42341870 ns
+Average Time / Key expansion     : 423.42 ns
+Average Time / Byte    : 1.76 ns

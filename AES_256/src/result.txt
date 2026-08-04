@@ -1,0 +1,53 @@
+gcc -O0
+
+Checksum: 00
+Iterations            : 100000
+Total Cycles           : 1268037513
+Cycles / Iteration    : 12680.38
+Cycles / Byte         : 792.5234
+Total Time            : 636576672 ns
+Average Time / Iteration     : 6365.77 ns
+Average Time / Byte    : 397.86 ns
+Cipher text : 
+8ea2b7ca516745bfeafc49904b496089
+
+gcc -O1
+
+Checksum: 00
+Iterations            : 100000
+Total Cycles           : 183703916
+Cycles / Iteration    : 1837.04
+Cycles / Byte         : 114.8149
+Total Time            : 92223502 ns
+Average Time / Iteration     : 922.24 ns
+Average Time / Byte    : 57.64 ns
+Cipher text : 
+8ea2b7ca516745bfeafc49904b496089
+
+gcc -O2
+
+Checksum: 00
+Iterations            : 100000
+Total Cycles           : 166008300
+Cycles / Iteration    : 1660.08
+Cycles / Byte         : 103.7552
+Total Time            : 83339962 ns
+Average Time / Iteration     : 833.40 ns
+Average Time / Byte    : 52.09 ns
+Cipher text : 
+8ea2b7ca516745bfeafc49904b496089
+
+gcc -O3
+
+Checksum: 00
+Iterations            : 100000
+Total Cycles           : 125738848
+Cycles / Iteration    : 1257.39
+Cycles / Byte         : 78.5868
+Total Time            : 63124061 ns
+Average Time / Iteration     : 631.24 ns
+Average Time / Byte    : 39.45 ns
+Cipher text : 
+8ea2b7ca516745bfeafc49904b496089
+
+
