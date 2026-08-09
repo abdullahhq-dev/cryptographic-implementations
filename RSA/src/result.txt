@@ -1,0 +1,19 @@
+gcc -O3 -march=native 
+Library: GMP
+RSA modulus: ~2048 bits
+
+
+RSA_ENCRYPT
+Iterations              : 10000
+Total Cycles            : 1073.58 M
+Cycles / Iteration      : 107.36 k
+Total Time              : 538.69 ms
+Average Time / Iteration: 53.87 us
+
+RSA_DECRYPT
+Iterations              : 10000
+Total Cycles            : 123489.58 M
+Cycles / Iteration      : 12.349 M
+Total Time              : 61.980 s
+Average Time / Iteration: 6.198 ms
+
