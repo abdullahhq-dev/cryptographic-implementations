@@ -5,15 +5,24 @@ RSA modulus: ~2048 bits
 
 RSA_ENCRYPT
 Iterations              : 10000
-Total Cycles            : 1073.58 M
-Cycles / Iteration      : 107.36 k
-Total Time              : 538.69 ms
-Average Time / Iteration: 53.87 us
+Total Cycles            : 855.71 M
+Cycles / Iteration      : 85.57 k
+Total Time              : 429.58 ms
+Average Time / Iteration: 42.96 us
+
+RSA_CRT_DECRYPT
+Iterations              : 10000
+Total Cycles            : 27553.91 M
+Cycles / Iteration      : 2.755 M
+Total Time              : 13.833 s
+Average Time / Iteration: 1.383 ms
 
 RSA_DECRYPT
 Iterations              : 10000
-Total Cycles            : 123489.58 M
-Cycles / Iteration      : 12.349 M
-Total Time              : 61.980 s
-Average Time / Iteration: 6.198 ms
+Total Cycles            : 98478.08 M
+Cycles / Iteration      : 9.848 M
+Total Time              : 49.438 s
+Average Time / Iteration: 4.944 ms
+
+For a 2048-bit RSA modulus, CRT reduced the decryption cost from 9.848 Mcycles (4.944 ms) to 2.755 Mcycles (1.383 ms), giving approximately a 3.57× (72%) speedup.
 

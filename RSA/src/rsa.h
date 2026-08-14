@@ -13,19 +13,15 @@ void rsa_generate_prime(mpz_t p,
                         gmp_randstate_t state,
                         const mp_bitcnt_t bits);
 
-void rsa_keygen(mpz_t n,
-                mpz_t e,
-                mpz_t d,
-                gmp_randstate_t state);
+void rsa_keygen(gmp_randstate_t state, mpz_t n, mpz_t e, mpz_t d, mpz_t p, mpz_t q, mpz_t dP, mpz_t dQ, mpz_t q_inv);
 
 void rsa_encrypt(mpz_t c,
                  const mpz_t m,
                  const mpz_t e,
                  const mpz_t n);
+                 
+void rsa_decrypt(mpz_t m, const mpz_t c, const mpz_t n, const mpz_t d);
 
-void rsa_decrypt(mpz_t m,
-                 const mpz_t c,
-                 const mpz_t d,
-                 const mpz_t n);
+void rsa_decrypt_crt(mpz_t m, const mpz_t c,  const mpz_t n, const mpz_t p, const mpz_t q, const mpz_t dP, const mpz_t dQ, const mpz_t q_inv);
 
 #endif /* RSA_H */
