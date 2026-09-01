@@ -1,6 +1,7 @@
 gcc -O3 -march=native 
 Library: GMP
 RSA modulus: ~2048 bits
+Message size: ~ 2047 bits
 
 
 RSA_ENCRYPT
@@ -25,4 +26,66 @@ Total Time              : 49.438 s
 Average Time / Iteration: 4.944 ms
 
 For a 2048-bit RSA modulus, CRT reduced the decryption cost from 9.848 Mcycles (4.944 ms) to 2.755 Mcycles (1.383 ms), giving approximately a 3.57× (72%) speedup.
+
+--Constant Time exponentiation function--
+Here I replaced the mpz_powm function with mpz_powm_sec. GMP states that, for same-size arguments and identical machine state, it is designed to have the same execution time and cache-access patterns, independent of the values of the arguments.This provides resistance against timing/cache side-channel leakage from the modular exponentiation operation.
+
+Since the Public key e is set as 2^16 + 1 = (10000000000000001), the modular exponentiation with e can be done with 17 multiplications which makes the encryption part significantly faster. since mpz_powm_sec is designed to have constant time execution, it is supposed to decrease the efficiency. here is the results I got replacing mpz_powm with mpz_powm_sec.
+
+RSA_ENCRYPT
+Iterations              : 10000
+Total Cycles            : 4086.50 M
+Cycles / Iteration      : 408.65 k
+Total Time              : 2051.50 ms
+Average Time / Iteration: 205.15 us
+
+RSA_CRT_DECRYPT
+Iterations              : 10000
+Total Cycles            : 31473.25 M
+Cycles / Iteration      : 3.147 M
+Total Time              : 15.800 s
+Average Time / Iteration: 1.580 ms
+
+RSA_DECRYPT
+Iterations              : 10000
+Total Cycles            : 112138.52 M
+Cycles / Iteration      : 11.214 M
+Total Time              : 56.296 s
+Average Time / Iteration: 5.630 ms
+
+As expected, encryption became ~4.8x slower. At the same time decryption became only ~1.14 slower for both normal and crt version.For decryption the private exponent is already around 2048 bits, and CRT exponents are around 1024 bits. Therefore the ordinary mpz_powm() is already doing a substantial amount of exponentiation work. Switching to the constant-time implementation adds overhead, but doesn't fundamentally transform the workload the way it does for e
+
+Further analysis
+
+I micro benchmarked the individual mpz_functions using ~2048 bit inputs. 
+
+
+mpz_mul ~ 1980.30 cycles/op
+mpz_mod ~ 92.64 cycles/op
+mpz_invert ~ 36392.36 cycles/op
+mpz_lcm ~ 33102.21 cycles/op
+mpz_gcd ~ 31096.37 cycles/op
+mpz_nextprime ~ 224004088.50 cycles/op
+mpz_powm ~ 9965218.01 cycles/op (random 2048 bits as base, exponent and mod)
+mpz_powm ~ 1365702.87 cycles/op (random 1024 bits as base, exponent and mod)
+mpz_powm ~ 86546.09 cycles/op ( exponent, e = 2^16+1,base and mod 2048 bits random values)
+mpz_powm_sec ~ 11245361.16 cycles/op (random 2048 bits as base, exponent and mod)
+mpz_powm_sec ~ 1578698.97 cycles/op cycles/op (random 1024 bits as base, exponent and mod)
+mpz_powm_sec ~ 427882.20 cycles/op ( exponent, e = 2^16+1,base and mod 2048 bits random values)
+
+I ran the rsa code inside the  gmpbench package provided in the gmp website. the below is the ouput:
+
+ gcc rsa.c -lgmp -O3
+abdullah@abdullah-HP-Notebook:~/Downloads/gmpbench-0.2$ ./a.out 2048
+Generating p, q, d...done; pq is 2048 bits
+Precomputing CRT constants
+Generating random messages
+Calibrating CPU speed...done
+Signing random messages 7272 times...done!
+RESULT: 724 operations per second
+
+The structure of my RSA-CRT implementation is very similar to the RSA implementation provided in GMPbench. Both perform two modular exponentiations using the CRT exponents, dP and dQ, followed by CRT recombination. The main difference is the CRT convention used for recombination. GMPbench computes p−1 modq and reconstructs the result using p, whereas my implementation computes q−1 modp and reconstructs using q. These are equivalent CRT formulations and produce the same RSA result.
+
+For a 2048-bit RSA key, GMPbench reported 724 operations/s, corresponding to approximately 1.38 ms/operation. My implementation measured 1.383 ms/operation for CRT decryption. Although the benchmark methodologies are not identical, the very close results provide a useful sanity check that my implementation has a comparable performance to the GMPbench implementation using the same underlying GMP arithmetic.
+
 

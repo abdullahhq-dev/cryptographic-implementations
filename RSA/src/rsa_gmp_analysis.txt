@@ -1,0 +1,180 @@
+ANALYSIS OF GMP MODULAR EXPONENTIATION RESULTS
+
+1. Effect of operand size
+
+For random 2048-bit base, modulus, and exponent:
+
+    mpz_powm  = 9.965 M cycles/op
+
+For random 1024-bit base, modulus, and exponent:
+
+    mpz_powm  = 1.366 M cycles/op
+
+The ratio is:
+
+    9.965 / 1.366 ≈ 7.29
+
+Thus, reducing the operand size from 2048 bits to 1024 bits reduced the measured modular exponentiation cost by approximately 7.29×. The 1024-bit operation costs only about 13.7% of the 2048-bit operation.
+
+This shows that the performance does not scale simply with the number of bits. Although the operands are only half as large, the complete modular exponentiation becomes more than seven times faster. The exact scaling depends on the algorithms used internally by GMP and the operand sizes.
+
+2. Relation to CRT RSA decryption
+
+Normal RSA decryption performs approximately:
+
+    c^d mod n
+
+where n and d are approximately 2048 bits.
+
+The measured 2048-bit modular exponentiation cost was:
+
+    ≈ 9.965 M cycles
+
+The actual normal RSA decryption benchmark was:
+
+    ≈ 9.848 M cycles
+
+These values are very close, showing that the RSA decryption benchmark is essentially dominated by the cost of the 2048-bit mpz_powm operation.
+
+CRT decryption performs two smaller modular exponentiations:
+
+    m1 = c^dP mod p
+    m2 = c^dQ mod q
+
+where p, q, dP, and dQ are approximately 1024 bits.
+
+The microbenchmark gives:
+
+    2 × 1.366 M
+    = 2.732 M cycles
+
+The actual CRT RSA decryption benchmark was:
+
+    ≈ 2.755 M cycles
+
+The difference is only about:
+
+    2.755 - 2.732 = 0.023 M cycles
+
+which is approximately 0.84%.
+
+This close agreement indicates that the two 1024-bit modular exponentiations account for almost all of the CRT decryption cost. The remaining cost is due to CRT recombination and other small implementation/benchmark overheads.
+
+The measured RSA decryption speedup was:
+
+    9.848 / 2.755 ≈ 3.57×
+
+Therefore, CRT reduced the measured decryption cost by approximately:
+
+    1 - (2.755 / 9.848) ≈ 72.0%
+
+3. Why the CRT speedup is not exactly 4×
+
+A simple intuition might suggest that halving the operand size should give a 4× improvement if arithmetic cost scaled exactly quadratically with operand size.
+
+However, the measured modular exponentiation scaling is:
+
+    2048-bit: 9.965 M cycles
+    1024-bit: 1.366 M cycles
+
+giving approximately 7.29× rather than 4×.
+
+This is because mpz_powm is a complete modular exponentiation operation, not simply one multiplication. Its cost depends on the algorithms used for modular multiplication, modular reduction, exponentiation, and the operand sizes. GMP also uses different optimized algorithms depending on operand size.
+
+Therefore, the correct conclusion is based on the measured scaling rather than assuming a fixed quadratic relationship.
+
+4. Effect of the RSA public exponent e = 65537
+
+For a random 2048-bit exponent:
+
+    mpz_powm ≈ 9.965 M cycles
+
+For the RSA public exponent:
+
+    e = 65537 = 2^16 + 1
+
+with 2048-bit base and modulus:
+
+    mpz_powm ≈ 86.55 k cycles
+
+The ratio is:
+
+    9.965 M / 86.55 k ≈ 115×
+
+Thus, modular exponentiation with the small RSA public exponent is approximately 115× cheaper than modular exponentiation with a random 2048-bit exponent in this benchmark.
+
+The actual RSA encryption benchmark was approximately:
+
+    85.57 k cycles
+
+which is very close to the 86.55 k-cycle microbenchmark.
+
+Therefore, the encryption timing is almost entirely explained by the cost of computing:
+
+    m^65537 mod n
+
+using mpz_powm.
+
+This also explains the large difference between RSA encryption and normal RSA decryption: encryption uses the very small public exponent 65537, while decryption uses a private exponent of approximately 2048 bits.
+
+5. mpz_powm versus mpz_powm_sec
+
+For random 2048-bit operands:
+
+    mpz_powm     ≈ 9.965 M cycles
+    mpz_powm_sec ≈ 11.245 M cycles
+
+The overhead is:
+
+    11.245 / 9.965 ≈ 1.13×
+
+or approximately 13%.
+
+For random 1024-bit operands:
+
+    mpz_powm     ≈ 1.366 M cycles
+    mpz_powm_sec ≈ 1.579 M cycles
+
+The overhead is:
+
+    1.579 / 1.366 ≈ 1.16×
+
+or approximately 16%.
+
+For e = 65537:
+
+    mpz_powm     ≈ 86.55 k cycles
+    mpz_powm_sec ≈ 427.88 k cycles
+
+The ratio is:
+
+    427.88 / 86.55 ≈ 4.94×
+
+Thus, the constant-time version has a much larger relative performance cost for the small RSA public exponent.
+
+The important security/performance observation is that mpz_powm_sec is designed for modular exponentiation with resistance to timing/cache side-channel leakage, so its execution strategy cannot exploit the particular exponent value in the same way as a normal variable-time implementation.
+
+The benchmark therefore demonstrates a clear performance/security trade-off:
+
+    mpz_powm       -> faster, variable-time
+    mpz_powm_sec   -> slower, constant-time-oriented
+
+6. Overall interpretation
+
+The benchmark results can be summarized as follows:
+
+    RSA encryption:
+        ≈ mpz_powm with 2048-bit operands and e = 65537
+        ≈ 85.6 k cycles
+
+    Normal RSA decryption:
+        ≈ mpz_powm with approximately 2048-bit exponent/modulus
+        ≈ 9.85 M cycles
+
+    CRT RSA decryption:
+        ≈ 2 × mpz_powm with approximately 1024-bit exponent/modulus
+        ≈ 2.76 M cycles
+
+The microbenchmarks closely predict the measured RSA encryption, normal decryption, and CRT decryption costs. This provides strong evidence that the dominant factor in the observed RSA performance is the modular exponentiation performed by mpz_powm.
+
+The next step is to examine the internal implementation of mpz_powm to determine exactly how GMP performs modular exponentiation, modular multiplication, and modular reduction, and how these operations scale with operand size.

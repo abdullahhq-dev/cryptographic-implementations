@@ -1,5 +1,5 @@
 
-## Benchmark results
+## CHACHA20 - Benchmark results
 
 - Compiler: gcc
 - Message length: 64 bytes
