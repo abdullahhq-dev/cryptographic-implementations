@@ -1,0 +1,3 @@
+remove vec (avoid heap allocations)
+remove bits to bytes conversion in the encode function
+Learn the math behind Kyber NTT

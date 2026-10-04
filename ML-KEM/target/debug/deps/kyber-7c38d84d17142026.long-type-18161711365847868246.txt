@@ -1,0 +1,2 @@
+sha3::digest::hybrid_array::Array<u8, UInt<UInt<UInt<UInt<UInt<UInt<UInt<UTerm, B1>, B0>, B0>, B0>, B0>, B0>, B0>>
+([u8; 32], [u8; 32]): From<sha3::digest::hybrid_array::Array<u8, UInt<UInt<UInt<UInt<UInt<UInt<UInt<UTerm, B1>, B0>, B0>, B0>, B0>, B0>, B0>>>

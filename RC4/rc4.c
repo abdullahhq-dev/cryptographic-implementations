@@ -23,7 +23,7 @@ void key_init( const u8 *key, const size_t key_len, u8 S[256]) {
   
   u8 j = 0;
   for (int i = 0; i < 256; i++) {
-    j += S[i] + key [ i % key_len ];
+    j += S[i] + key [ i % key_len ]; // this will roundup modulo 256 since variables are u8
     swap(&S[i] , &S[j]);
   }
   
@@ -99,7 +99,7 @@ Cycles / Byte for key_stream generation : 6.3344
 
   --Analysis--
   
-The PRGA outputs 1 byte of keystreamp per iteration. for each iteration the algorithm performs approximately
+The PRGA outputs 1 byte of keystream per iteration. for each iteration the algorithm performs approximately
 3 additions
 9 memory access 
 total ~ 12 operations for each iteration
