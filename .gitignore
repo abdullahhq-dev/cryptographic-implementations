@@ -2,8 +2,10 @@
 scratch/
 notes/
 
+
 # Build artifacts
 build/
+target/
 
 # Compiled object files
 *.o
