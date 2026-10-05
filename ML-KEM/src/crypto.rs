@@ -176,7 +176,7 @@ pub fn sample_ntt(b: &B32, i: u8, j: u8) -> NttPolynomial {
     while k < 256 {
         ctx.read(&mut C);
 
-        let d1:u16 = (C[0] as u16) + ((C[1] as u16) & 15u16) << 8; // full 8 bits of C[0]  and appending the least significant 4 bits of C[1]
+        let d1:u16 = (C[0] as u16) + (((C[1] as u16) & 15u16) << 8); // full 8 bits of C[0]  and appending the least significant 4 bits of C[1]
         let d2:u16 = ((C[1] as u16) >> 4) + ((C[2] as u16) << 4);   // most significant 4 bits of C[1] and appending full 8 bits of C[2] 
 
         if d1 < 3329 {

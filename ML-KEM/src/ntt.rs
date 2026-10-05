@@ -98,7 +98,7 @@ pub fn MultiplyNTTs(f: &NttPolynomial, g: &NttPolynomial) -> NttPolynomial {
 
 pub fn vec_dot_ntt<const K: usize>(t_hat: &[NttPolynomial;K], y_hat: &[NttPolynomial;K]) -> NttPolynomial {
     let mut out = [0u16;256];
-    for i in 0..2 {
+    for i in 0..K {
         let product = MultiplyNTTs(&t_hat[i], &y_hat[i]);
         out = poly_add(&out, &product);
     }
