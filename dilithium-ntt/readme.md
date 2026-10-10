@@ -14,7 +14,7 @@ The implementation follows the NTT structure used by Dilithium, with:
 ## Files
 
 ```text
-.
+src
 ├── dilithium_ntt.c
 ├── dilithium_ntt.h
 └── test_ntt.c
