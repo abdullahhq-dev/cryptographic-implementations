@@ -33,6 +33,7 @@ pub fn encaps(ek: &ek_internal) -> Result<(KEY, CIPHER), EncapsError> {
     Ok(Encaps_internal(ek, &m))
 }
 
+#[derive(Debug)]
 pub enum DecapsError {
     HashCheckFailed
 }
