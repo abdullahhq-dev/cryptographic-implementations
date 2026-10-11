@@ -52,6 +52,9 @@ int main() {
   printf("Average Time / Iteration: %.2f us\n",
          ns_per_iteration / 1e3);
   
+
+  // CRT decryption
+
   clock_gettime(CLOCK_MONOTONIC, &start_time);
   start_cycles = __rdtscp(&cpu_id);
   
