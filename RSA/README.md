@@ -48,4 +48,4 @@ Use `rsa_const.c` instead of `rsa.c` to benchmark the `mpz_powm_sec` version. Re
 
 ## Scope and security
 
-This is an educational implementation. The encryption function performs raw RSA modular exponentiation; RSAES-OAEP and other PKCS #1 encoding schemes. The key-generation code seeds GMP's pseudorandom generator with `time(NULL)`, which is not suitable for generating production cryptographic keys.
+This is an educational implementation. The encryption function performs raw RSA modular exponentiation; RSAES-OAEP and other PKCS #1 encoding schemes are not implemented. The key-generation code seeds GMP's pseudorandom generator with `time(NULL)`, which is not suitable for generating production cryptographic keys.
