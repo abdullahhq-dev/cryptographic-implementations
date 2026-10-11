@@ -37,6 +37,10 @@ void store_state(const state_t state, u8 output[AES_BLOCK_SIZE]) {
   }
 }
 
+/*
+  Block Encryption
+*/
+
 static void SubBytes(state_t state) {
   for (int i = 0; i < 4; ++i) {   
     for (int j = 0; j < 4; ++j) {
@@ -68,7 +72,7 @@ static void ShiftRows(state_t state) {
   state[3][1] = temp;
 }
 
-// Now defining mix_columns function.
+
 static inline u8 xtime(u8 x) {
   return ((x<<1) ^ ((x>>7) * 0x1b));
 }
@@ -119,7 +123,9 @@ void encrypt_block(state_t state, const u8 round_key[AES256_EXPANDED_KEY_SIZE]) 
     AddRoundKey(state, round_key + AES_BLOCK_SIZE * AES256_NR) ;  
 }
 
-// Key schedule function defining
+/*
+  Key scheduling
+*/ 
 
 static void SubWord(u8 input[4]) {
   for (int i = 0; i < 4; i++) {
