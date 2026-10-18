@@ -52,6 +52,28 @@ The ACVP vectors are currently included as selected test cases for manual
 validation. More comprehensive automated test-vector coverage will be added
 as the project develops.
 
+## Benchmarks
+
+Criterion benchmarks measure the deterministic internal key-generation,
+encapsulation, and decapsulation operations for ML-KEM-512 using fixed inputs.
+The same benchmark run also measures the RustCrypto [`ml-kem`](https://github.com/RustCrypto/KEMs/tree/master/ml-kem)
+implementation on the same machine.
+
+| Operation | This implementation | RustCrypto `ml-kem` | Ratio (this / RustCrypto) |
+|---|---:|---:|---:|
+| Key generation | 84.527 µs | 46.407 µs | 1.82× |
+| Encapsulation | 89.892 µs | 45.197 µs | 1.99× |
+| Decapsulation | 126.54 µs | 59.005 µs | 2.14× |
+
+See [BENCHMARKS.md](BENCHMARKS.md) for complete detail.
+
+Run the benchmarks with:
+
+```bash
+cargo bench --bench ml_kem
+```
+
+
 ## Project Structure
 
 ```text
@@ -77,6 +99,11 @@ The implementation currently uses the following external crates:
 - [`hex`](https://crates.io/crates/hex) — hexadecimal encoding and decoding
   for test vectors
 
+### Benchmark-only dependencies
+
+- [`criterion`](https://crates.io/crates/criterion) — benchmarking harness
+- RustCrypto [`ml-kem`](https://github.com/RustCrypto/KEMs/tree/master/ml-kem) — reference implementation used for performance comparison; 
+
 ## Pending Work
 
 ### Correctness and API
@@ -95,8 +122,9 @@ The implementation currently uses the following external crates:
 
 ### Performance
 
+- [x] Add Criterion benchmarks for deterministic ML-KEM-512 internal operations
+- [x] Establish an initial timing comparison against RustCrypto `ml-kem`
 - [ ] Implement Barrett and Montgomery reduction where appropriate
-- [ ] Benchmark the implementation
 - [ ] SIMD-based hardware acceleration
 
 ### Extensions

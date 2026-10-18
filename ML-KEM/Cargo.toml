@@ -9,3 +9,11 @@ shake = "0.1.0"
 subtle = { version = "2.6", features = ["const-generics"] }
 hex = "0.4"
 getrandom = "0.4.3"
+
+[dev-dependencies]
+rustcrypto-ml-kem = { package = "ml-kem", version = "0.3.3", features = ["hazmat"] }
+criterion = { version = "0.8.2", features = ["html_reports"] }
+
+[[bench]]
+name = "ml_kem"
+harness = false
